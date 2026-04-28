@@ -85,6 +85,7 @@ pipeline {
                 sh 'docker rmi -f $(docker images "${imageName}" -q) || true'
             }
         }
+        
         stage('Deploy to ECS') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
@@ -104,12 +105,15 @@ pipeline {
 
                     echo "\$NEW_TASK_DEF" > new-task-def.json
 
-                    aws ecs register-task-definition \
-                        --cli-input-json file://new-task-def.json
+                    NEW_TASK_ARN=\$(aws ecs register-task-definition \
+                        --cli-input-json file://new-task-def.json \
+                        --query 'taskDefinition.taskDefinitionArn' \
+                        --output text)
 
                     aws ecs update-service \
                         --cluster ${cluster} \
                         --service ${service} \
+                        --task-definition \$NEW_TASK_ARN \
                         --force-new-deployment
                     """
                 }
