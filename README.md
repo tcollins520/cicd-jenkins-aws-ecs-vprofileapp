@@ -4,7 +4,7 @@ This project demonstrates a production-style CI/CD pipeline that automates the b
 The pipeline ensures reliable, repeatable, and version-controlled deployments using Jenkins and AWS services.
 ________________________________________
 📊 Architecture
-GitHub → Jenkins → Maven → SonarQube → Docker → ECR → ECS / EKS → Users
+GitHub → Jenkins → Maven → SonarQube → Docker → ECR → ECS → Users
 ________________________________________
 # Prerequisites
 - JDK 21 
