@@ -3,9 +3,9 @@
 # ---------- Stage 1: Build Artifact ----------
 FROM maven:3.9.9-eclipse-temurin-21-jammy AS build_image
 
-WORKDIR /vprofile-project
+WORKDIR /app
 
-COPY . .
+COPY vprofile-project/ .
 
 RUN mvn clean package -DskipTests
 
