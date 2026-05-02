@@ -18,7 +18,7 @@ pipeline {
 
         stage('Fetch Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/tcollins520/cicd-jenkins-aws-ecs-vprofileapp.git'
+                git branch: 'main', url: 'https://github.com/tcollins520/AWS-ECS-JenkinsCICD.git'
             }
         }
 
