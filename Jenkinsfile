@@ -28,8 +28,7 @@ pipeline {
             }
             post {
                 success {
-                    echo 'Archiving artifact...'
-                    archiveArtifacts artifacts: '**/target/*.war'
+                    archiveArtifacts artifacts: 'target/*.war'
                 }
             }
         }
@@ -64,7 +63,10 @@ pipeline {
         stage('Build App Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${imageName}:${BUILD_NUMBER}", ".")
+                    dockerImage = docker.build(
+                        "${imageName}:${BUILD_NUMBER}",
+                        "-f Docker-files/app/multistage/Dockerfile ."
+                    )
                 }
             }
         }
@@ -80,12 +82,12 @@ pipeline {
             }
         }
 
-        stage('Remove Container Images') {
+        stage('Cleanup Local Images') {
             steps {
                 sh 'docker rmi -f $(docker images "${imageName}" -q) || true'
             }
         }
-        
+
         stage('Deploy to ECS') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
@@ -120,5 +122,5 @@ pipeline {
             }
         }
 
-    } // ✅ closes stages
-}     // ✅ closes pipeline
+    }
+}
